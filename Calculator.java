@@ -57,12 +57,13 @@ public class Calculator {
             }
 
             // Perform actions as if '=' was clicked:
-            public void handleEquals(int outcome){
+            public int handleEquals(int outcome){
                 jtf.setText("" + outcome);
                 print("" + outcome, arg1, arg2, operator);
                 arg2 = outcome;
                 operatorPresent = false;
                 afterEquals = true;
+                return outcome;
             }
 
             public void actionPerformed(ActionEvent e) {
@@ -83,27 +84,25 @@ public class Calculator {
                 try {
                     // If it's a number:
                     arg1 = Integer.parseInt(arg1 + Integer.toString(Integer.parseInt(String.valueOf(input)))); // 👻
+                    if (operator != 0) {
+                        operatorPresent = true;
+                        arg2 = arg1;
+                    }
                 } catch (NumberFormatException nfe) {
                     // If it's '=':
                     if (input == '=') {
-                        handleEquals(calculate(arg1, arg2, operator));
+                        arg1 = handleEquals(calculate(arg1, arg2, operator));
                     } else {
                     // if it's '+', '-', '*' or '/':
+                        operator = input;
+                        jtf.setText("");
                         // if 2nd operator without '=':
                         if (operatorPresent){
-                            jtf.setText("");
-                            operator = input;
-                            handleEquals(calculate(arg2, arg2, operator));
-                            arg2 = arg1;
-                            arg1 = 0;
+                            arg1 = handleEquals(calculate(arg2, arg2, operator));
                             operatorPresent = false;
-                        } else {
-                            operator = input;
-                            operatorPresent = true;
-                            arg2 = arg1;
-                            arg1 = 0;
-                            jtf.setText("");
                         }
+                    arg2 = arg1;
+                    arg1 = 0;
                     }
                 }
             }
