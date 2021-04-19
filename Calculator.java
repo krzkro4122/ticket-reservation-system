@@ -4,6 +4,28 @@ import javax.swing.*;
 
 public class Calculator {
 
+    public static int calculate(int input1, int input2, char operator){
+        int output = 0;
+
+        switch (operator) {
+            default:
+            case '+':
+                output = input2 + input1;
+                break;
+            case '-':
+                output = input2 - input1;
+                break;
+            case '*':
+                output = input2 * input1;
+                break;
+            case '/':
+                output = input2 / input1;
+                break;
+        }
+
+        return output;
+    }
+
     public static void createAndShowGUI() {
 
         JFrame jf = new JFrame("Calculator");
