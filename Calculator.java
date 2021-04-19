@@ -4,26 +4,18 @@ import javax.swing.*;
 
 public class Calculator {
 
+    public static void print(String str, int arg1, int arg2, char operator){
+        System.out.println(str + " (Current arg1: " + arg1 + ", arg2: " + arg2 + ", operator: " + operator + ")");
+    }
+
     public static int calculate(int input1, int input2, char operator){
-        int output = 0;
 
-        switch (operator) {
-            default:
-            case '+':
-                output = input2 + input1;
-                break;
-            case '-':
-                output = input2 - input1;
-                break;
-            case '*':
-                output = input2 * input1;
-                break;
-            case '/':
-                output = input2 / input1;
-                break;
-        }
-
-        return output;
+        return switch (operator) {
+            default -> input2 + input1; // <- addition as default operation
+            case '-' -> input2 - input1;
+            case '*' -> input2 * input1;
+            case '/' -> input2 / input1;
+        };
     }
 
     public static void createAndShowGUI() {
@@ -42,161 +34,79 @@ public class Calculator {
         jf.getContentPane().add(jp, BorderLayout.CENTER);
         jp.setLayout(new GridLayout(4, 4));
 
-        String buttons[] = {"1", "2", "3", "+",
+        String[] buttons = {"1", "2", "3", "+",
                             "4", "5", "6", "-", 
                             "7", "8", "9", "*", 
                             "C", "0", "=", "/"};
 
-        ActionListener myActionListener = new ActionListener(){
-    
+        ActionListener myActionListener = new ActionListener() {
+
+            // Fields initialization:
             char operator;
-            int in1, in2;
             boolean operatorPresent = false;
-            boolean previousWasNumber = true;
-            boolean previousWasEquals = false;
-        
+            boolean afterEquals = false;
+            int arg1 = 0, arg2 = 0;
+
+            // Reset all flags and fields
+            public void clear(){
+                operator = 0;
+                arg1 = arg2 = 0;
+                jtf.setText("");
+                operatorPresent = false;
+                afterEquals = false;
+            }
+
+            // Perform actions as if '=' was clicked:
+            public void handleEquals(int outcome){
+                jtf.setText("" + outcome);
+                print("" + outcome, arg1, arg2, operator);
+                arg2 = outcome;
+                operatorPresent = false;
+                afterEquals = true;
+            }
+
             public void actionPerformed(ActionEvent e) {
+
                 char input = e.getActionCommand().charAt(0);
-                if (input != 'C')
-                    System.out.println(input);
-        
-                if (input != '+' && input != '-' && input != '*' && input != '/' && input != '='){
-        
-                    if(!previousWasNumber || previousWasEquals){
-                        jtf.setText("" + input);
-                        previousWasEquals = false;
-                    }
-        
-                    else{
-                        if (jtf.getText().equals("0"))
-                            jtf.setText("" + input);
-                        else
-                            jtf.setText(jtf.getText() + input);
+
+                if (input == 'C') clear(); // If it's 'C':
+                else { // if it's anything but 'C':
+                    print("" + input, arg1, arg2, operator);
+                    try{
+                        Integer.parseInt(String.valueOf(input)); // <- Just doesn't print operators
+                        if (jtf.getText().equals("0")) jtf.setText("" + input); // Erase the initial "0"
+                        else jtf.setText(jtf.getText() + input); // Display numbers
+                    } catch (NumberFormatException ignored){}
+                }
+
+                // Handle input
+                try {
+                    // If it's a number:
+                    arg1 = Integer.parseInt(arg1 + Integer.toString(Integer.parseInt(String.valueOf(input)))); // 👻
+                } catch (NumberFormatException nfe) {
+                    // If it's '=':
+                    if (input == '=') {
+                        handleEquals(calculate(arg1, arg2, operator));
+                    } else {
+                    // if it's '+', '-', '*' or '/':
+                        // if 2nd operator without '=':
+                        if (operatorPresent){
+                            jtf.setText("");
+                            operator = input;
+                            handleEquals(calculate(arg2, arg2, operator));
+                            arg2 = arg1;
+                            arg1 = 0;
+                            operatorPresent = false;
+                        } else {
+                            operator = input;
+                            operatorPresent = true;
+                            arg2 = arg1;
+                            arg1 = 0;
+                            jtf.setText("");
+                        }
                     }
                 }
-        
-                switch(input){
-                case '+':
-                    if(!operatorPresent){
-                        operatorPresent = true;
-                        previousWasNumber = false;
-                    }
-                    else{
-                        if(!previousWasNumber){
-                            operator = input;
-                            // jtf.setText(jtf.getText().substring(0, jtf.getText().length() - 2));
-                            // jtf.setText(jtf.getText() + input);
-                        }
-                        else{
-                            in2 = 0;
-                        }
-                    }
-                    operator = input;
-                    break;
-                case '-':
-                    if(!operatorPresent){
-                        operatorPresent = true;
-                        previousWasNumber = false;
-                    }
-                    else{
-                        if(!previousWasNumber){
-                            operator = input;
-                            // jtf.setText(jtf.getText().substring(0, jtf.getText().length() - 2));
-                            // jtf.setText(jtf.getText() + input);
-                        }
-                        else{
-                            in2 = 0;
-                        }
-                    }
-                    operator = input;
-                    break;
-                case '*':
-                    if(!operatorPresent){
-                        operatorPresent = true;
-                        previousWasNumber = false;
-                    }
-                    else{
-                        if(!previousWasNumber){
-                            operator = input;
-                            // jtf.setText(jtf.getText().substring(0, jtf.getText().length() - 2));
-                            // jtf.setText(jtf.getText() + input);
-                        }
-                        else{
-                            in2 = 0;
-                        }
-                    }
-                    operator = input;
-                    break;
-                case '/':
-                    if(!operatorPresent){
-                        operatorPresent = true;
-                        previousWasNumber = false;
-                    }
-                    else{
-                        if(!previousWasNumber){
-                            operator = input;
-                            // jtf.setText(jtf.getText().substring(0, jtf.getText().length() - 2));
-                            // jtf.setText(jtf.getText() + input);
-                        }
-                        else{
-                            in2 = 0;
-                        }
-                    }
-                    operator = input;
-                    break;
-                case 'C':
-                    in1 = 0;
-                    in2 = 0;
-                    operatorPresent = false;
-                    previousWasNumber = true;
-                    operator = 0;
-                    jtf.setText("0");
-                    break;
-                case '=':
-                    String output = "";
-                    int temp = 0;        
-                    previousWasEquals = true;
-                    switch(operator){
-                        case '+':
-                            temp = in1 + in2;
-                            output = ("" + temp);
-                            break;
-                        case '-':
-                            temp = in1 - in2;
-                            output = ("" + temp);  
-                            break;
-                        case '*':
-                            temp = in1 * in2;
-                            output = ("" + temp);
-                            break;
-                        case '/':
-                            try{
-                                temp = in1 / in2;
-                                output = ("" + temp);
-                            } catch (ArithmeticException exc){
-                                System.err.println("Division by zero detected!");
-                                in1 = 0;
-                                in2 = 0;
-                                operatorPresent = false;
-                                previousWasNumber = true;
-                                operator = 0;
-                                output = "Division by zero detected!";
-                                jtf.setText("Division by zero detected!");
-                            }                        
-                            break;                
-                    }
-                    in1 = temp;
-                    System.out.println(output);
-                    jtf.setText("" + output);                    
-                    break;                    
-                default:
-                    previousWasNumber = true;
-                    if(!operatorPresent){
-                        in1 = Integer.valueOf("" + in1 + (input - 48));
-                    } else
-                        in2 = Integer.valueOf("" + in2 + (input - 48));                        
-                }
-            }  		
+            }
         };
 
         for (String button : buttons) {
@@ -211,8 +121,6 @@ public class Calculator {
     }
 
         public static void main(String[] args) {
-            javax.swing.SwingUtilities.invokeLater(new Runnable() {
-                public void run() { createAndShowGUI(); }
-            });        
+            javax.swing.SwingUtilities.invokeLater(Calculator::createAndShowGUI);
         }
 }
