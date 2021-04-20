@@ -11,10 +11,10 @@ public class Calculator {
     public static int calculate(int input1, int input2, char operator){
 
         return switch (operator) {
-            default -> input2 + input1; // <- addition as default operation
-            case '-' -> input2 - input1;
-            case '*' -> input2 * input1;
-            case '/' -> input2 / input1;
+            default -> input1 + input2; // <- addition as default operation
+            case '-' -> input1 - input2;
+            case '*' -> input1 * input2;
+            case '/' -> input1 / input2;
         };
     }
 
@@ -44,6 +44,7 @@ public class Calculator {
             // Fields initialization:
             char operator;
             boolean operatorPresent = false;
+            boolean previousWasDigit = false;
             boolean afterEquals = false;
             int arg1 = 0, arg2 = 0;
 
@@ -53,6 +54,7 @@ public class Calculator {
                 arg1 = arg2 = 0;
                 jtf.setText("");
                 operatorPresent = false;
+                previousWasDigit = false;
                 afterEquals = false;
             }
 
@@ -60,8 +62,8 @@ public class Calculator {
             public int handleEquals(int outcome){
                 jtf.setText("" + outcome);
                 print("" + outcome, arg1, arg2, operator);
-                arg2 = outcome;
                 operatorPresent = false;
+                previousWasDigit = false;
                 afterEquals = true;
                 return outcome;
             }
@@ -73,36 +75,51 @@ public class Calculator {
                 if (input == 'C') clear(); // If it's 'C':
                 else { // if it's anything but 'C':
                     print("" + input, arg1, arg2, operator);
-                    try{
+
+                    // Handle input
+                    try {
                         Integer.parseInt(String.valueOf(input)); // <- Just doesn't print operators
                         if (jtf.getText().equals("0")) jtf.setText("" + input); // Erase the initial "0"
                         else jtf.setText(jtf.getText() + input); // Display numbers
-                    } catch (NumberFormatException ignored){}
-                }
-
-                // Handle input
-                try {
-                    // If it's a number:
-                    arg1 = Integer.parseInt(arg1 + Integer.toString(Integer.parseInt(String.valueOf(input)))); // 👻
-                    if (operator != 0) {
-                        operatorPresent = true;
-                        arg2 = arg1;
-                    }
-                } catch (NumberFormatException nfe) {
-                    // If it's '=':
-                    if (input == '=') {
-                        arg1 = handleEquals(calculate(arg1, arg2, operator));
-                    } else {
-                    // if it's '+', '-', '*' or '/':
-                        operator = input;
-                        jtf.setText("");
-                        // if 2nd operator without '=':
-                        if (operatorPresent){
-                            arg1 = handleEquals(calculate(arg2, arg2, operator));
-                            operatorPresent = false;
+                        // Check if there is an operator:
+                        if (operator != 0) {
+                            operatorPresent = true;
+                            jtf.setText("");
                         }
-                    arg2 = arg1;
-                    arg1 = 0;
+                        // If it's a number:                        
+                        if (!operatorPresent)
+                            arg1 = Integer.parseInt(arg1 + Integer.toString(Integer.parseInt(String.valueOf(input)))); // 👻
+                        else
+                            arg2 = Integer.parseInt(arg2 + Integer.toString(Integer.parseInt(String.valueOf(input)))); // 👻
+                        previousWasDigit = true;
+                    } catch (NumberFormatException nfe) {
+                        // If it's '=':
+                        if (input == '=') {
+                            arg1 = handleEquals(calculate(arg1, arg2, operator));
+                        } else {
+                        // if it's '+', '-', '*' or '/':                                                               
+                            // if 2nd operator without '=':
+                            if (operatorPresent){
+                                // operator after digit
+                                if(previousWasDigit){                                                                    
+                                    handleEquals(calculate(arg1, arg2, operator));
+                                    operatorPresent = false;
+                                    previousWasDigit = true;
+                                } else{ // operator after operator
+                                    operator = input;
+                                    operatorPresent = true;
+                                    System.out.println("Debug =v");
+                                    previousWasDigit = false;
+                                }
+                                
+                            }
+                            // if 1st operator without '=':
+                            else {
+                                operator = input;
+                                operatorPresent = true;
+                                previousWasDigit = false;
+                            }                            
+                        }
                     }
                 }
             }
