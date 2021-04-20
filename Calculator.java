@@ -4,6 +4,8 @@ import javax.swing.*;
 
 public class Calculator {
 
+    private static final JTextField jtf = new JTextField("0");
+
     public static void print(String str, int arg1, int arg2, char operator){
         System.out.println(str + " (Current arg1: " + arg1 + ", arg2: " + arg2 + ", operator: " + operator + ")");
     }
@@ -22,7 +24,6 @@ public class Calculator {
 
         JFrame jf = new JFrame("Calculator");
 
-        JTextField jtf = new JTextField("0");
         jtf.setHorizontalAlignment(JTextField.RIGHT);
         jtf.setPreferredSize(new Dimension(200, 30));
         Font font1 = new Font("SansSerif", Font.BOLD, 20);
@@ -52,7 +53,7 @@ public class Calculator {
             public void clear(){
                 operator = 0;
                 arg1 = arg2 = 0;
-                jtf.setText("");
+                jtf.setText("0");
                 operatorPresent = false;
                 previousWasDigit = false;
                 afterEquals = false;
@@ -78,18 +79,19 @@ public class Calculator {
 
                     // Handle input
                     try {
-                        // trigger NumerFormatException when input's not a digit
+                        // trigger NumberFormatException when input's not a digit
                         Integer.parseInt(String.valueOf(input)); 
                         // If number after '=', clear is needed:     
                         if(afterEquals) clear();
-                        // If it's a number:                        
+                        // If it's a number:
+                        String digit = Integer.toString(Integer.parseInt(String.valueOf(input)));
                         if (!operatorPresent) {
-                            arg1 = Integer.parseInt(arg1 + Integer.toString(Integer.parseInt(String.valueOf(input)))); // 👻
-                            jtf.setText("" + arg1); // Print arg1 in textfield                            
+                            arg1 = Integer.parseInt(arg1 + digit); // 👻
+                            jtf.setText("" + arg1); // Print arg1 in textField
                         }
                         else {
-                            arg2 = Integer.parseInt(arg2 + Integer.toString(Integer.parseInt(String.valueOf(input)))); // 👻
-                            jtf.setText("" + arg2); // Print arg2 in textfield                            
+                            arg2 = Integer.parseInt(arg2 + digit); // 👻
+                            jtf.setText("" + arg2); // Print arg2 in textField
                         }
                         previousWasDigit = true;
                     } catch (NumberFormatException nfe) {
@@ -97,23 +99,22 @@ public class Calculator {
                         if (input == '=') arg1 = handleEquals(calculate(arg1, arg2, operator));
                         else {
                         // if it's '+', '-', '*' or '/':                                                               
-                            // if 2nd operator without '=':
+                            // if 2nd operator before '=':
                             if (operatorPresent){
                                 // 2nd operator after digit -> calculate for first operator and calculate result with second operator and new argument
                                 if(previousWasDigit){                                                                    
                                     arg1 = handleEquals(calculate(arg1, arg2, operator));
-                                    operator = input;
                                     arg2 = 0;
+                                    operator = input;
                                     operatorPresent = false;
                                     previousWasDigit = true;
                                 } else{ // 2nd operator after operator -> override with new operator
                                     operator = input;
                                     operatorPresent = true;
-                                    System.out.println("Debug =v");
                                     previousWasDigit = false;
                                 }                                
                             }
-                            // if 1st operator without '=':
+                            // if 1st operator before '=':
                             else {
                                 operator = input;
                                 operatorPresent = true;
