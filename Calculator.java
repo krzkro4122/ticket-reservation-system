@@ -78,31 +78,32 @@ public class Calculator {
 
                     // Handle input
                     try {
-                        Integer.parseInt(String.valueOf(input)); // <- Just doesn't print operators
-                        if (jtf.getText().equals("0")) jtf.setText("" + input); // Erase the initial "0"
-                        else jtf.setText(jtf.getText() + input); // Display numbers
-                        // Check if there is an operator:
-                        if (operator != 0) {
-                            operatorPresent = true;
-                            jtf.setText("");
-                        }
+                        // trigger NumerFormatException when input's not a digit
+                        Integer.parseInt(String.valueOf(input)); 
+                        // If number after '=', clear is needed:     
+                        if(afterEquals) clear();
                         // If it's a number:                        
-                        if (!operatorPresent)
+                        if (!operatorPresent) {
                             arg1 = Integer.parseInt(arg1 + Integer.toString(Integer.parseInt(String.valueOf(input)))); // 👻
-                        else
+                            jtf.setText("" + arg1); // Print arg1 in textfield                            
+                        }
+                        else {
                             arg2 = Integer.parseInt(arg2 + Integer.toString(Integer.parseInt(String.valueOf(input)))); // 👻
+                            jtf.setText("" + arg2); // Print arg2 in textfield                            
+                        }
                         previousWasDigit = true;
                     } catch (NumberFormatException nfe) {
                         // If it's '=':
-                        if (input == '=') {
-                            arg1 = handleEquals(calculate(arg1, arg2, operator));
-                        } else {
+                        if (input == '=') arg1 = handleEquals(calculate(arg1, arg2, operator));
+                        else {
                         // if it's '+', '-', '*' or '/':                                                               
                             // if 2nd operator without '=':
                             if (operatorPresent){
                                 // operator after digit
                                 if(previousWasDigit){                                                                    
-                                    handleEquals(calculate(arg1, arg2, operator));
+                                    arg1 = handleEquals(calculate(arg1, arg2, operator));
+                                    operator = input;
+                                    arg2 = 0;
                                     operatorPresent = false;
                                     previousWasDigit = true;
                                 } else{ // operator after operator
@@ -110,8 +111,7 @@ public class Calculator {
                                     operatorPresent = true;
                                     System.out.println("Debug =v");
                                     previousWasDigit = false;
-                                }
-                                
+                                }                                
                             }
                             // if 1st operator without '=':
                             else {
