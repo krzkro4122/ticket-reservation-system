@@ -99,14 +99,14 @@ public class Calculator {
                         // if it's '+', '-', '*' or '/':                                                               
                             // if 2nd operator without '=':
                             if (operatorPresent){
-                                // operator after digit
+                                // 2nd operator after digit -> calculate for first operator and calculate result with second operator and new argument
                                 if(previousWasDigit){                                                                    
                                     arg1 = handleEquals(calculate(arg1, arg2, operator));
                                     operator = input;
                                     arg2 = 0;
                                     operatorPresent = false;
                                     previousWasDigit = true;
-                                } else{ // operator after operator
+                                } else{ // 2nd operator after operator -> override with new operator
                                     operator = input;
                                     operatorPresent = true;
                                     System.out.println("Debug =v");
