@@ -6,8 +6,7 @@ public class Calculator {
 
     private static final JTextField jtf = new JTextField("0");
 
-    public static int calculate(int input1, int input2, char operator) { 
-
+    public static int calculate(int input1, int input2, char operator) {
         return switch (operator) {
             default -> input1 + input2; // <- addition as default operation
             case '-' -> input1 - input2;
@@ -65,6 +64,15 @@ public class Calculator {
                 afterEquals = true;
                 return outcome;
             }
+            // Check for division by zero, returns false if spotted
+            public boolean handleDivisionByZero(){
+                if (operator == '/' && arg2 == 0) {
+                    clear();
+                    jtf.setText("Division by zero!");
+                    return false;
+                }
+                return true;
+            }
 
             public void actionPerformed(ActionEvent e) {
 
@@ -93,24 +101,41 @@ public class Calculator {
                         }
                         previousWasDigit = true;
                     } catch (NumberFormatException nfe) {
+                        if(jtf.getText().equals("Division by zero!")) return;
                         // If it's '=':
                         if (input == '=') {
                             // '=' following a digit
                             if (previousWasDigit) {
                                 // when multiple operators -> need to calculate with inverted arguments 
-                                if(multiOperation) arg1 = handleEquals(calculate(arg2, arg1, operator));
-                                else arg1 = handleEquals(calculate(arg1, arg2, operator));
+                                if(multiOperation) {
+                                    if (handleDivisionByZero()) {
+                                        arg1 = handleEquals(calculate(arg2, arg1, operator));
+                                        return;
+                                    }
+                                }
+                                else {
+                                    if (handleDivisionByZero()) {
+                                        arg1 = handleEquals(calculate(arg1, arg2, operator));
+                                        return;
+                                    }
+                                }
                             } else { // '=' following an operator -> take both arguments as arg1 
                                 if(arg2 == 0) arg2 = arg1;
-                                arg1 = handleEquals(calculate(arg1, arg2, operator));
+                                if (handleDivisionByZero()) {
+                                    arg1 = handleEquals(calculate(arg1, arg2, operator));
+                                    return;
+                                }
                             }
                         } else {
-                        // if it's '+', '-', '*' or '/':                                                               
+                        // if it's '+', '-', '*' or '/':
                             // if 2nd operator before '=':
                             if (operatorPresent){
                                 // 2nd operator after digit -> calculate for first operator and calculate result with second operator and new argument
-                                if (previousWasDigit){                                                                    
-                                    arg2 = handleEquals(calculate(arg1, arg2, operator));
+                                if (previousWasDigit){
+                                    if (handleDivisionByZero()) {
+                                        arg2 = handleEquals(calculate(arg1, arg2, operator));
+                                        return;
+                                    }
                                     // arg1 = 0;
                                     operator = input;
                                     operatorPresent = false;
