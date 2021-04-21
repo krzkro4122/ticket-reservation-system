@@ -6,7 +6,8 @@ public class Calculator {
 
     private static final JTextField jtf = new JTextField("0");
 
-    public static int calculate(int input1, int input2, char operator) {
+    public static int calculate(int input1, int input2, char operator) { 
+
         return switch (operator) {
             default -> input1 + input2; // <- addition as default operation
             case '-' -> input1 - input2;
@@ -64,15 +65,6 @@ public class Calculator {
                 afterEquals = true;
                 return outcome;
             }
-            // Check for division by zero, returns false if spotted
-            public boolean handleDivisionByZero(){
-                if (operator == '/' && arg2 == 0) {
-                    clear();
-                    jtf.setText("Division by zero!");
-                    return false;
-                }
-                return true;
-            }
 
             public void actionPerformed(ActionEvent e) {
 
@@ -81,81 +73,71 @@ public class Calculator {
                 if (input == 'C') clear(); // If it's 'C':
                 else { // if it's anything but 'C':
                     try {
-                        // trigger NumberFormatException when input's not a digit
-                        Integer.parseInt(String.valueOf(input)); 
-                        // If number after '=', clear is needed:     
-                        if (afterEquals && !previousWasDigit) clear();
-                        // Case with multiple operators and no '='
-                        else if (afterEquals && previousWasDigit) {
-                            arg1 = 0;
-                            multiOperation = true;
-                        }
-                        // If it's a number:
-                        String digit = Integer.toString(Integer.parseInt(String.valueOf(input)));
-                        if (!operatorPresent) {
-                            arg1 = Integer.parseInt(arg1 + digit); // 👻
-                            jtf.setText("" + arg1); // Print arg1 in textField
-                        } else {
-                            arg2 = Integer.parseInt(arg2 + digit); // 👻
-                            jtf.setText("" + arg2); // Print arg2 in textField
-                        }
-                        previousWasDigit = true;
-                    } catch (NumberFormatException nfe) {
-                        if(jtf.getText().equals("Division by zero!")) return;
-                        // If it's '=':
-                        if (input == '=') {
-                            // '=' following a digit
-                            if (previousWasDigit) {
-                                // when multiple operators -> need to calculate with inverted arguments 
-                                if(multiOperation) {
-                                    if (handleDivisionByZero()) {
-                                        arg1 = handleEquals(calculate(arg2, arg1, operator));
-                                        return;
-                                    }
-                                }
-                                else {
-                                    if (handleDivisionByZero()) {
-                                        arg1 = handleEquals(calculate(arg1, arg2, operator));
-                                        return;
-                                    }
-                                }
-                            } else { // '=' following an operator -> take both arguments as arg1 
-                                if(arg2 == 0) arg2 = arg1;
-                                if (handleDivisionByZero()) {
-                                    arg1 = handleEquals(calculate(arg1, arg2, operator));
-                                    return;
-                                }
+                        try {
+                            // trigger NumberFormatException when input's not a digit
+                            Integer.parseInt(String.valueOf(input));
+                            // If number after '=', clear is needed:
+                            if (afterEquals && !previousWasDigit) clear();
+                                // Case with multiple operators and no '='
+                            else if (afterEquals) {
+                                arg1 = 0;
+                                multiOperation = true;
                             }
-                        } else {
-                        // if it's '+', '-', '*' or '/':
-                            // if 2nd operator before '=':
-                            if (operatorPresent){
-                                // 2nd operator after digit -> calculate for first operator and calculate result with second operator and new argument
-                                if (previousWasDigit){
-                                    if (handleDivisionByZero()) {
+                            // If it's a number:
+                            String digit = Integer.toString(Integer.parseInt(String.valueOf(input)));
+                            if (!operatorPresent) {
+                                arg1 = Integer.parseInt(arg1 + digit); // 👻
+                                jtf.setText("" + arg1); // Print arg1 in textField
+                            } else {
+                                arg2 = Integer.parseInt(arg2 + digit); // 👻
+                                jtf.setText("" + arg2); // Print arg2 in textField
+                            }
+                            previousWasDigit = true;
+                        } catch (NumberFormatException nfe) {
+                            // Block all except digits and 'C' if Division by Zero occurs
+                            if (jtf.getText().equals("Division by zero!")) return;
+                            // If it's '=':
+                            if (input == '=') {
+                                // '=' following a digit
+                                if (previousWasDigit) {
+                                    // when multiple operators -> need to calculate with inverted arguments
+                                    if (multiOperation) arg1 = handleEquals(calculate(arg2, arg1, operator));
+                                    else arg1 = handleEquals(calculate(arg1, arg2, operator));
+                                } else { // '=' following an operator -> take both arguments as arg1
+                                    if (arg2 == 0) arg2 = arg1;
+                                    arg1 = handleEquals(calculate(arg1, arg2, operator));
+                                }
+                            } else {
+                                // if it's '+', '-', '*' or '/':
+                                // if 2nd operator before '=':
+                                if (operatorPresent) {
+                                    // 2nd operator after digit -> calculate for first operator and calculate result with second operator and new argument
+                                    if (previousWasDigit) {
                                         arg2 = handleEquals(calculate(arg1, arg2, operator));
-                                        return;
+                                        // arg1 = 0;
+                                        operator = input;
+                                        operatorPresent = false;
+                                        previousWasDigit = true;
+                                    } else { // 2nd operator after operator -> override with new operator
+                                        operator = input;
+                                        operatorPresent = true;
+                                        previousWasDigit = false;
                                     }
-                                    // arg1 = 0;
+                                } else { // if 1st operator before '=':
                                     operator = input;
-                                    operatorPresent = false;
-                                    previousWasDigit = true;
-                                } else { // 2nd operator after operator -> override with new operator
-                                    operator = input;
+                                    // case where we want to operate on output of previous calculation -> just after the output of a calculation
+                                    if (afterEquals && !previousWasDigit) {
+                                        arg2 = 0;
+                                        afterEquals = false;
+                                    }
                                     operatorPresent = true;
                                     previousWasDigit = false;
-                                }                                
-                            } else { // if 1st operator before '=':
-                                operator = input;
-                                // case where we want to operate on output of previous calculation -> just after the output of a calculation
-                                if (afterEquals && !previousWasDigit) {
-                                    arg2 = 0;
-                                    afterEquals = false;
                                 }
-                                operatorPresent = true;
-                                previousWasDigit = false;
-                            }                            
+                            }
                         }
+                    } catch (ArithmeticException ae) {
+                        clear();
+                        jtf.setText("Division by zero!");
                     }
                 }
             }
