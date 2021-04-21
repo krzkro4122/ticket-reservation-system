@@ -6,11 +6,11 @@ public class Calculator {
 
     private static final JTextField jtf = new JTextField("0");
 
-    public static void print(String str, int arg1, int arg2, char operator){
+    public static void print(String str, int arg1, int arg2, char operator) {
         System.out.println(str + " (Current arg1: " + arg1 + ", arg2: " + arg2 + ", operator: " + operator + ")");
     }
 
-    public static int calculate(int input1, int input2, char operator){
+    public static int calculate(int input1, int input2, char operator) { 
 
         return switch (operator) {
             default -> input1 + input2; // <- addition as default operation
@@ -47,6 +47,7 @@ public class Calculator {
             boolean operatorPresent = false;
             boolean previousWasDigit = false;
             boolean afterEquals = false;
+            boolean multiOperation = false;
             int arg1 = 0, arg2 = 0;
 
             // Reset all flags and fields
@@ -57,10 +58,11 @@ public class Calculator {
                 operatorPresent = false;
                 previousWasDigit = false;
                 afterEquals = false;
+                multiOperation = false;
             }
 
             // Perform actions as if '=' was clicked:
-            public int handleEquals(int outcome){
+            public int handleEquals(int outcome) {
                 jtf.setText("" + outcome);
                 print("" + outcome, arg1, arg2, operator);
                 operatorPresent = false;
@@ -82,7 +84,12 @@ public class Calculator {
                         // trigger NumberFormatException when input's not a digit
                         Integer.parseInt(String.valueOf(input)); 
                         // If number after '=', clear is needed:     
-                        if(afterEquals) clear();
+                        if (afterEquals && !previousWasDigit) clear();
+                        // Case with multiple operators and no '='
+                        else if (afterEquals && previousWasDigit) {
+                            arg1 = 0;
+                            multiOperation = true;
+                        }
                         // If it's a number:
                         String digit = Integer.toString(Integer.parseInt(String.valueOf(input)));
                         if (!operatorPresent) {
@@ -96,19 +103,32 @@ public class Calculator {
                         previousWasDigit = true;
                     } catch (NumberFormatException nfe) {
                         // If it's '=':
-                        if (input == '=') arg1 = handleEquals(calculate(arg1, arg2, operator));
+                        if (input == '=') {
+                            // '=' following a digit
+                            if (previousWasDigit) {
+                                // when multiple operators -> need to calculate with inverted arguments 
+                                if(multiOperation)
+                                    arg1 = handleEquals(calculate(arg2, arg1, operator));
+                                else
+                                    arg1 = handleEquals(calculate(arg1, arg2, operator));
+                            }
+                            else { // '=' following an operator -> take both arguments as arg1 
+                                if(arg2 == 0) arg2 = arg1;
+                                arg1 = handleEquals(calculate(arg1, arg2, operator));
+                            }
+                        }
                         else {
                         // if it's '+', '-', '*' or '/':                                                               
                             // if 2nd operator before '=':
                             if (operatorPresent){
                                 // 2nd operator after digit -> calculate for first operator and calculate result with second operator and new argument
-                                if(previousWasDigit){                                                                    
-                                    arg1 = handleEquals(calculate(arg1, arg2, operator));
-                                    arg2 = 0;
+                                if (previousWasDigit){                                                                    
+                                    arg2 = handleEquals(calculate(arg1, arg2, operator));
+                                    // arg1 = 0;
                                     operator = input;
                                     operatorPresent = false;
                                     previousWasDigit = true;
-                                } else{ // 2nd operator after operator -> override with new operator
+                                } else { // 2nd operator after operator -> override with new operator
                                     operator = input;
                                     operatorPresent = true;
                                     previousWasDigit = false;
@@ -117,6 +137,11 @@ public class Calculator {
                             // if 1st operator before '=':
                             else {
                                 operator = input;
+                                // case where we want to operate on output of previous calculation -> just after the output of a calculation
+                                if (afterEquals && !previousWasDigit) {
+                                    arg2 = 0;
+                                    afterEquals = false;
+                                }
                                 operatorPresent = true;
                                 previousWasDigit = false;
                             }                            
