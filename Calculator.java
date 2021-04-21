@@ -147,7 +147,7 @@ public class Calculator {
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-        public static void main(String[] args) {
-            javax.swing.SwingUtilities.invokeLater(Calculator::createAndShowGUI);
-        }
+    public static void main(String[] args) {
+        javax.swing.SwingUtilities.invokeLater(Calculator::createAndShowGUI);
+    }
 }
