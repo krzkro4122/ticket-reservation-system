@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+//import java.io.OutputStream;
 import javax.swing.*;
 
 public class Calculator {
@@ -44,7 +45,7 @@ public class Calculator {
             boolean previousWasDigit = false;
             boolean afterEquals = false;
             boolean multiOperation = false;
-            int arg1 = 0, arg2 = 0;
+            int arg1 = 0, arg2 = 0, temp = 0;
 
             // Reset all flags and fields
             public void clear(){
@@ -60,6 +61,7 @@ public class Calculator {
             // Perform actions as if '=' was clicked:
             public int handleEquals(int outcome) {
                 jtf.setText("" + outcome);
+                System.out.println(outcome);
                 operatorPresent = false;
                 previousWasDigit = false;
                 afterEquals = true;
@@ -72,6 +74,7 @@ public class Calculator {
 
                 if (input == 'C') clear(); // If it's 'C':
                 else { // if it's anything but 'C':
+                    System.out.println(input);
                     try {
                         try {
                             // trigger NumberFormatException when input's not a digit
@@ -87,6 +90,8 @@ public class Calculator {
                             String digit = Integer.toString(Integer.parseInt(String.valueOf(input)));
                             if (!operatorPresent) {
                                 arg1 = Integer.parseInt(arg1 + digit); // 👻
+                                if (multiOperation)
+                                    temp = arg1;
                                 jtf.setText("" + arg1); // Print arg1 in textField
                             } else {
                                 arg2 = Integer.parseInt(arg2 + digit); // 👻
@@ -101,12 +106,16 @@ public class Calculator {
                                 // '=' following a digit
                                 if (previousWasDigit) {
                                     // when multiple operators -> need to calculate with inverted arguments
-                                    if (multiOperation) arg1 = handleEquals(calculate(arg2, arg1, operator));
+                                    if (multiOperation) {
+                                        arg1 = handleEquals(calculate(arg2, arg1, operator));
+                                        arg2 = temp;
+                                    }
                                     else arg1 = handleEquals(calculate(arg1, arg2, operator));
                                 } else { // '=' following an operator -> take both arguments as arg1
                                     if (arg2 == 0) arg2 = arg1;
                                     arg1 = handleEquals(calculate(arg1, arg2, operator));
                                 }
+                                multiOperation = false;
                             } else {
                                 // if it's '+', '-', '*' or '/':
                                 // if 2nd operator before '=':
@@ -114,7 +123,7 @@ public class Calculator {
                                     // 2nd operator after digit -> calculate for first operator and calculate result with second operator and new argument
                                     if (previousWasDigit) {
                                         arg2 = handleEquals(calculate(arg1, arg2, operator));
-                                        // arg1 = 0;
+                                        arg1 = 0;
                                         operator = input;
                                         operatorPresent = false;
                                         previousWasDigit = true;
