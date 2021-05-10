@@ -92,8 +92,7 @@ public class Calculator {
                             String digit = Integer.toString(Integer.parseInt(String.valueOf(input)));
                             if (!operatorPresent) {
                                 arg1 = Integer.parseInt(arg1 + digit); // 👻
-                                if (multiOperation)
-                                    temp = arg1;
+                                if (multiOperation) temp = arg1;
                                 jtf.setText("" + arg1); // Print arg1 in textField
                             } else {
                                 arg2 = Integer.parseInt(arg2 + digit); // 👻
@@ -125,7 +124,7 @@ public class Calculator {
                                     // 2nd operator after digit -> calculate for first operator and calculate result with second operator and new argument
                                     if (previousWasDigit) {
                                         arg2 = handleEquals(calculate(arg1, arg2, operator));
-                                        arg1 = 0;
+                                        //arg1 = 0;
                                         operator = input;
                                         operatorPresent = false;
                                         previousWasDigit = true;

@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch Calculator",
+            "request": "launch",
+            "mainClass": "Calculator",
+            "projectName": "Java_2d47b8d5"
+        },
+        {
+            "type": "java",
             "name": "Launch Current File",
             "request": "launch",
             "mainClass": "${file}"
