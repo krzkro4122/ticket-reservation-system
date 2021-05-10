@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.*;
 //import java.io.OutputStream;
 import javax.swing.*;
+import javax.swing.plaf.ColorUIResource;
 
 public class Calculator {
 
@@ -23,8 +24,9 @@ public class Calculator {
 
         jtf.setHorizontalAlignment(JTextField.RIGHT);
         jtf.setPreferredSize(new Dimension(200, 30));
-        Font font1 = new Font("SansSerif", Font.BOLD, 20);
-        jtf.setFont(font1);
+        jtf.setBackground(Color.BLACK);
+        jtf.setForeground(Color.WHITE);            
+        jtf.setFont(new Font("SansSerif", Font.BOLD, 20));
 
         jf.getContentPane().add(jtf, BorderLayout.NORTH);
 
@@ -154,6 +156,9 @@ public class Calculator {
 
         for (String button : buttons) {
             JButton jb = new JButton(button);
+            jb.setBackground(Color.BLACK);
+            jb.setForeground(Color.WHITE);
+            jb.setFont(new Font("SansSerif", Font.BOLD, 20));
             jp.add(jb);
             jb.addActionListener(myActionListener);
         }
