@@ -2,7 +2,6 @@ import java.awt.*;
 import java.awt.event.*;
 //import java.io.OutputStream;
 import javax.swing.*;
-import javax.swing.plaf.ColorUIResource;
 
 public class Calculator {
 
@@ -27,6 +26,7 @@ public class Calculator {
         jtf.setBackground(Color.BLACK);
         jtf.setForeground(Color.WHITE);            
         jtf.setFont(new Font("SansSerif", Font.BOLD, 20));
+        jtf.setEditable(false);
 
         jf.getContentPane().add(jtf, BorderLayout.NORTH);
 
@@ -87,6 +87,7 @@ public class Calculator {
                             else if (afterEquals) {
                                 arg1 = 0;
                                 multiOperation = true;
+                                afterEquals = false;
                             }
                             // If it's a number:
                             String digit = Integer.toString(Integer.parseInt(String.valueOf(input)));
@@ -124,7 +125,7 @@ public class Calculator {
                                     // 2nd operator after digit -> calculate for first operator and calculate result with second operator and new argument
                                     if (previousWasDigit) {
                                         arg2 = handleEquals(calculate(arg1, arg2, operator));
-                                        //arg1 = 0;
+                                        // arg1 = 0;
                                         operator = input;
                                         operatorPresent = false;
                                         previousWasDigit = true;
