@@ -1,6 +1,5 @@
 import java.awt.*;
 import java.awt.event.*;
-//import java.io.OutputStream;
 import javax.swing.*;
 
 public class Calculator {
@@ -10,7 +9,7 @@ public class Calculator {
     public static int calculate(int input1, int input2, char operator) { 
 
         return switch (operator) {
-            default -> input1 + input2; // <- addition as default operation
+            default  -> input1 + input2; // <- addition as default operation
             case '-' -> input1 - input2;
             case '*' -> input1 * input2;
             case '/' -> input1 / input2;
@@ -63,7 +62,7 @@ public class Calculator {
             // Perform actions as if '=' was clicked:
             public int handleEquals(int outcome) {
                 jtf.setText("" + outcome);
-                System.out.println(outcome);
+                // System.out.println(outcome);
                 operatorPresent = false;
                 previousWasDigit = false;
                 afterEquals = true;
@@ -76,7 +75,7 @@ public class Calculator {
 
                 if (input == 'C') clear(); // If it's 'C':
                 else { // if it's anything but 'C':
-                    System.out.println(input);
+                    // System.out.println(input);
                     try {
                         try {
                             // trigger NumberFormatException when input's not a digit
