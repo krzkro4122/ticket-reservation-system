@@ -1,25 +1,30 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class LoginFrame extends JFrame implements ActionListener {
 
     Container container = getContentPane();
+
     JLabel userLabel = new JLabel("USERNAME", SwingConstants.CENTER);
     JLabel passwordLabel = new JLabel("PASSWORD", SwingConstants.CENTER);
     JTextField userTextField = new JTextField();
     JPasswordField passwordField = new JPasswordField();
     JButton loginButton = new JButton("LOGIN");
     JButton resetButton = new JButton("RESET");
-    JCheckBox showPassword = new JCheckBox("Show Password");
+    JCheckBox showPassword = new JCheckBox("Show Password");    
+    static Map<String, String> credentialMap;
 
+    // Constructor
     LoginFrame() {
         setFonts();
         setColors();
         setLayoutManager();
         addComponentsToContainer();
-        addActionEvent();
+        addActionEvent();        
+        credentialMap = createDataMap();
     }
 
     public void setFonts(){
@@ -73,32 +78,65 @@ public class LoginFrame extends JFrame implements ActionListener {
         showPassword.addActionListener(this);
     }
 
+    // Retrieve usernames with respective passwords and store them in a map
+    public Map<String, String> createDataMap(){
+        Map<String, String> credentialMap = new HashMap<String, String>();                
+
+        // int numberOfUsers = 2;
+        // for (int i = 0; i < numberOfUsers; i++) {            
+            credentialMap.put("mehtab", "12345");
+            credentialMap.put("99111104190", "krkrol");
+        // }
+
+        return credentialMap;
+    }
+
+    public boolean checkCredentials(String username, String password){
+        // Check whether username already exists
+        if(credentialMap.containsKey(username)){
+            // Check whether password mathes the given username
+            if(credentialMap.get(username).equals(password)) return true;
+        }        
+        return false;
+    }
+
+    public static void createTicketReservationFrame(String username){
+        TicketReservationFrame ticketFrame = new TicketReservationFrame();                
+        ticketFrame.setTitle("Tickets of " + username);
+        ticketFrame.setVisible(true);        
+        ticketFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        ticketFrame.pack(); 
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
 
+        // Button "Login"
         if (e.getSource() == loginButton) {
             String userText;
             String pwdText;
+
             userText = userTextField.getText();
             pwdText = passwordField.getText();
-            if (userText.equalsIgnoreCase("mehtab") && pwdText.equalsIgnoreCase("12345")) {
-                JOptionPane.showMessageDialog(this, "Login Successful");
-            } else {
-                JOptionPane.showMessageDialog(this, "Invalid Username or Password");
-            }
-        }
 
+            if (checkCredentials(userText, pwdText)) {
+                JOptionPane.showMessageDialog(this, "Login Successful");
+                // Open the Ticket Reservation Window    
+                createTicketReservationFrame(userText);
+                // And close the Login window
+                this.setVisible(false);
+            }
+            else JOptionPane.showMessageDialog(this, "Invalid Username or Password");            
+        }
+        // Button "Reset"
         if (e.getSource() == resetButton) {
             userTextField.setText("");
             passwordField.setText("");
         }
-        
+        // RadioButton "Show Password"
         if (e.getSource() == showPassword) {
-            if (showPassword.isSelected()) {
-                passwordField.setEchoChar((char) 0);
-            } else {
-                passwordField.setEchoChar('*');
-            }
+            if (showPassword.isSelected()) passwordField.setEchoChar((char) 0);
+            else passwordField.setEchoChar('*');
         }
 
     }
