@@ -76,6 +76,7 @@ public class LoginFrame extends JFrame implements ActionListener {
         loginButton.addActionListener(this);
         resetButton.addActionListener(this);
         showPassword.addActionListener(this);
+        passwordField.addActionListener(this);
     }
 
     // Retrieve usernames with respective passwords and store them in a map
@@ -111,8 +112,8 @@ public class LoginFrame extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        // Button "Login"
-        if (e.getSource() == loginButton) {
+        // Button "Login" or enter key press
+        if (e.getSource() == loginButton || e.getSource() == passwordField) {
             String userText;
             String pwdText;
 

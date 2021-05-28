@@ -14,6 +14,7 @@ public class TicketReservationFrame extends JFrame implements ActionListener {
     TicketReservationFrame(){
         setLayout();
         addComponentsToContainer();
+        addActionEvent();
     }
 
     void setLayout(){
@@ -25,8 +26,19 @@ public class TicketReservationFrame extends JFrame implements ActionListener {
         container.add(deleteTicketButton);
     }
 
+    public void addActionEvent() {
+        addTicketButton.addActionListener(this);
+        deleteTicketButton.addActionListener(this);        
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        // Nothin for now
+        if(e.getSource() == addTicketButton){
+            System.out.println("Add a Ticket.");
+        }
+        
+        if(e.getSource() == deleteTicketButton){
+            System.out.println("Delete a Ticket.");
+        }
     }
 }
