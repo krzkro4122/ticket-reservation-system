@@ -121,7 +121,6 @@ public class LoginFrame extends JFrame implements ActionListener {
             pwdText = passwordField.getText();
 
             if (checkCredentials(userText, pwdText)) {
-                JOptionPane.showMessageDialog(this, "Login Successful");
                 // Open the Ticket Reservation Window    
                 createTicketReservationFrame(userText);
                 // And close the Login window
