@@ -23,7 +23,11 @@ public class TicketReservationFrame extends JFrame implements ActionListener {
     }
 
     private void init(String username){                
-        ticketsPanel.setPreferredSize(new Dimension(300, 300));
+        this.setTitle("Tickets");
+        this.setVisible(true); 
+        this.setPreferredSize(new Dimension(300, 300));       
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         ticketsPanel.setBorder(BorderFactory.createTitledBorder("Tickets of " + username));
     }
 
@@ -64,14 +68,16 @@ public class TicketReservationFrame extends JFrame implements ActionListener {
         } else {
             String buttonID = ((JButton) e.getSource()).getText();
             // After double click
-            if (e.getSource() == lastClickedButton){
-                
+            if (e.getSource() == lastClickedButton){                
                 System.out.println("It's me, " + buttonID);      
-                new TicketInfoPopup(buttonID);          
-            }
+                new TicketInfoPopup(buttonID).pack();                         
+                lastClickedButton = null;
+                deleteTicketButton.setText("Delete");
+            } else { 
             // Regsiter clicked button
             lastClickedButton = (JButton) e.getSource();
             deleteTicketButton.setText("Delete " + buttonID);
+            }
         }
 
         // Update the container after changes

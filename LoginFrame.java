@@ -102,12 +102,7 @@ public class LoginFrame extends JFrame implements ActionListener {
     }
 
     public static void createTicketReservationFrame(String username){
-        TicketReservationFrame ticketFrame = new TicketReservationFrame(username);                
-        ticketFrame.setTitle("Tickets");
-        ticketFrame.setVisible(true); 
-        ticketFrame.setPreferredSize(new Dimension(300, 300));       
-        ticketFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        ticketFrame.pack(); 
+        new TicketReservationFrame(username).pack();
     }
 
     @Override
