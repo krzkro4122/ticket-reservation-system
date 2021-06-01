@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 public class TicketReservationFrame extends JFrame implements ActionListener {
 
@@ -25,8 +24,18 @@ public class TicketReservationFrame extends JFrame implements ActionListener {
     private void init(String username){                
         this.setTitle("Tickets");
         this.setVisible(true); 
-        this.setPreferredSize(new Dimension(300, 300));       
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setPreferredSize(new Dimension(300, 300));     
+        this.addWindowListener(new WindowAdapter(){
+            // Close all children windows
+            public void windowClosing(WindowEvent e){
+                Window[] windows = Window.getWindows();
+                for (Window window : windows){
+                    window.setVisible(false);
+                }
+                // And re-open LoginFrame
+                new LoginFrame().setVisible(true);
+            }
+        });          
 
         ticketsPanel.setBorder(BorderFactory.createTitledBorder("Tickets of " + username));
     }

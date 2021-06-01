@@ -19,12 +19,20 @@ public class LoginFrame extends JFrame implements ActionListener {
 
     // Constructor
     LoginFrame() {
+        init();
         setFonts();
         setColors();
         setLayoutManager();
         addComponentsToContainer();
         addActionEvent();        
         credentialMap = createDataMap();
+    }
+
+    public void init(){        
+        this.setTitle("Login");
+        this.setVisible(true);
+        this.setBounds(10, 10, 370, 201);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     public void setFonts(){
