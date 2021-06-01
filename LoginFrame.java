@@ -102,9 +102,10 @@ public class LoginFrame extends JFrame implements ActionListener {
     }
 
     public static void createTicketReservationFrame(String username){
-        TicketReservationFrame ticketFrame = new TicketReservationFrame();                
-        ticketFrame.setTitle("Tickets of " + username);
-        ticketFrame.setVisible(true);        
+        TicketReservationFrame ticketFrame = new TicketReservationFrame(username);                
+        ticketFrame.setTitle("Tickets");
+        ticketFrame.setVisible(true); 
+        ticketFrame.setPreferredSize(new Dimension(300, 300));       
         ticketFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ticketFrame.pack(); 
     }
@@ -118,7 +119,7 @@ public class LoginFrame extends JFrame implements ActionListener {
             String pwdText;
 
             userText = userTextField.getText();
-            pwdText = passwordField.getText();
+            pwdText = String.valueOf(passwordField.getPassword());
 
             if (checkCredentials(userText, pwdText)) {
                 JOptionPane.showMessageDialog(this, "Login Successful");
