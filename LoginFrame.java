@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 public class LoginFrame extends JFrame implements ActionListener {
 
     Container container = getContentPane();
+    JPanel containerPanel = new JPanel();
 
     JLabel userLabel = new JLabel("USERNAME", SwingConstants.CENTER);
     JLabel passwordLabel = new JLabel("PASSWORD", SwingConstants.CENTER);
@@ -33,6 +34,8 @@ public class LoginFrame extends JFrame implements ActionListener {
         this.setVisible(true);
         this.setBounds(10, 10, 370, 201);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        containerPanel.setBorder(BorderFactory.createTitledBorder("Login"));
     }
 
     public void setFonts(){
@@ -48,9 +51,9 @@ public class LoginFrame extends JFrame implements ActionListener {
 
     public void setColors() {
         // Background Color
-        Color backgroundColor = Color.white;
-        container.setBackground(backgroundColor);
-        showPassword.setBackground(backgroundColor);
+        // Color backgroundColor = Color.white;
+        // containerPanel.setBackground(backgroundColor);
+        // showPassword.setBackground(backgroundColor);
 
         // Button Colors
         Color buttonTextColor = Color.white;
@@ -62,22 +65,23 @@ public class LoginFrame extends JFrame implements ActionListener {
     }
 
     public void setLayoutManager() {
-        container.setLayout(new GridLayout(6, 2));
+        containerPanel.setLayout(new GridLayout(6, 2));
     }
 
     public void addComponentsToContainer() {
-        container.add(new Label()); // 👻
-        container.add(new Label()); // 👻
-        container.add(userLabel);
-        container.add(userTextField);
-        container.add(passwordLabel);        
-        container.add(passwordField);
-        container.add(new Label()); // 👻
-        container.add(showPassword);
-        container.add(new Label()); // 👻
-        container.add(new Label()); // 👻
-        container.add(loginButton);
-        container.add(resetButton);
+        containerPanel.add(new Label()); // 👻
+        containerPanel.add(new Label()); // 👻
+        containerPanel.add(userLabel);
+        containerPanel.add(userTextField);
+        containerPanel.add(passwordLabel);        
+        containerPanel.add(passwordField);
+        containerPanel.add(new Label()); // 👻
+        containerPanel.add(showPassword);
+        containerPanel.add(new Label()); // 👻
+        containerPanel.add(new Label()); // 👻
+        containerPanel.add(loginButton);
+        containerPanel.add(resetButton);
+        container.add(containerPanel);
     }
 
     public void addActionEvent() {
