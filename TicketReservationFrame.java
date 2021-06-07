@@ -14,6 +14,8 @@ public class TicketReservationFrame extends JFrame implements ActionListener {
     JPanel buttonsPanel = new JPanel(new GridLayout(1, 2));
     JPanel ticketsPanel = new JPanel();
 
+    private String username;
+
     TicketReservationFrame(String username){
         init(username);
         setLayout();
@@ -21,7 +23,8 @@ public class TicketReservationFrame extends JFrame implements ActionListener {
         addActionEvent();
     }
 
-    private void init(String username){                
+    private void init(String username){    
+        this.username = username;          
         this.setTitle("Tickets");
         this.setVisible(true); 
         this.setPreferredSize(new Dimension(300, 300));     
@@ -79,7 +82,7 @@ public class TicketReservationFrame extends JFrame implements ActionListener {
             // After double click
             if (e.getSource() == lastClickedButton){                
                 System.out.println("It's me, " + buttonID);      
-                new TicketInfoPopup(buttonID).pack();                         
+                new TicketInfoPopup(buttonID, this.username).pack();                         
                 lastClickedButton = null;
                 deleteTicketButton.setText("Delete");
             } else { 

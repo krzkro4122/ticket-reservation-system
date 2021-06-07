@@ -32,7 +32,8 @@ public class LoginFrame extends JFrame implements ActionListener {
     public void init(){        
         this.setTitle("Login");
         this.setVisible(true);
-        this.setBounds(10, 10, 370, 201);
+        this.setBounds(10, 10, 300, 200);
+        this.setPreferredSize(new Dimension(300, 200));  
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         containerPanel.setBorder(BorderFactory.createTitledBorder("Login"));
@@ -44,17 +45,12 @@ public class LoginFrame extends JFrame implements ActionListener {
         userTextField.setFont(new Font("Arial", Font.PLAIN, fontSize));
         passwordLabel.setFont(new Font("Arial", Font.PLAIN, fontSize));        
         passwordField.setFont(new Font("Arial", Font.PLAIN, fontSize));
-        showPassword.setFont(new Font("Arial", Font.PLAIN, fontSize)); 
+        showPassword.setFont(new Font("Arial", Font.PLAIN, 14)); 
         loginButton.setFont(new Font("Arial", Font.PLAIN, fontSize));
         resetButton.setFont(new Font("Arial", Font.PLAIN, fontSize));
     }
 
     public void setColors() {
-        // Background Color
-        // Color backgroundColor = Color.white;
-        // containerPanel.setBackground(backgroundColor);
-        // showPassword.setBackground(backgroundColor);
-
         // Button Colors
         Color buttonTextColor = Color.white;
         loginButton.setForeground(buttonTextColor);
@@ -134,7 +130,11 @@ public class LoginFrame extends JFrame implements ActionListener {
                 // And close the Login window
                 this.setVisible(false);
             }
-            else JOptionPane.showMessageDialog(this, "Invalid Username or Password");            
+            else {
+                JOptionPane.showMessageDialog(this, "Invalid Username or Password");            
+                passwordField.requestFocus();
+                passwordField.selectAll();
+            }
         }
         // Button "Reset"
         if (e.getSource() == resetButton) {
@@ -144,7 +144,10 @@ public class LoginFrame extends JFrame implements ActionListener {
         // RadioButton "Show Password"
         if (e.getSource() == showPassword) {
             if (showPassword.isSelected()) passwordField.setEchoChar((char) 0);
-            else passwordField.setEchoChar('*');
+            else {
+                passwordField.setEchoChar('*');
+                passwordField.requestFocus();                
+            }
         }
 
     }
