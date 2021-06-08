@@ -12,7 +12,7 @@ public class TicketReservationFrame extends JFrame implements ActionListener {
     JButton lastClickedButton = null;
 
     JPanel buttonsPanel = new JPanel(new GridLayout(1, 2));
-    JPanel ticketsPanel = new JPanel();
+    public JPanel ticketsPanel = new JPanel(); 
 
     private String username;
 
@@ -50,7 +50,8 @@ public class TicketReservationFrame extends JFrame implements ActionListener {
 
     public void addComponentsToContainer() { 
         buttonsPanel.add(addTicketButton);       
-        buttonsPanel.add(deleteTicketButton);
+        buttonsPanel.add(deleteTicketButton);     
+
         container.add(ticketsPanel);
         container.add(buttonsPanel, BorderLayout.PAGE_END);
     }
@@ -64,10 +65,12 @@ public class TicketReservationFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         if(e.getSource() == addTicketButton){                        
-            JButton button = new JButton("Ticket#" + counter++);            
-            System.out.println("Add " + button.getText());            
-            button.addActionListener(this);
-            ticketsPanel.add(button);            
+            // JButton button = new JButton("Ticket#" + counter++);            
+            // System.out.println("Add " + button.getText());            
+            // button.addActionListener(this);
+            // ticketsPanel.add(button);           
+            
+            new TicketAddPopup(this);
 
         } else if(e.getSource() == deleteTicketButton){            
             if (lastClickedButton != null){
