@@ -9,19 +9,22 @@ public class TicketDAO {
 
    static final String QUERYlistALL = "SELECT * FROM Tickets";
    static String QUERYadd;
-   static final String QUERYdelete = "SELECT * FROM Tickets";
-   static final String QUERYedit = "SELECT * FROM Tickets";
+   static String QUERYdelete;
+   static String QUERYedit;
 
    public static void main(String[] args) {
-      listAll();
-      // add(new Ticket("111111111", "111111", "111111", "1", "41487625529", "1111111", "2022-9-16 03:20", "1111111"));
+      getAll();
+      for (Ticket ticket : tickets)
+         delete(ticket);
       // listAll();
    }
-   public static void listAll(){
+   public static void getAll(){
       // Open a connection
       try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
          Statement stmt = conn.createStatement();
-         ResultSet rs = stmt.executeQuery(QUERYlistALL);) {         
+         ResultSet rs = stmt.executeQuery(QUERYlistALL);) {   
+            
+         tickets = new ArrayList<Ticket>();
          // Extract data from result set
          while (rs.next()) {
             Ticket ticket = new Ticket(
@@ -58,6 +61,44 @@ public class TicketDAO {
             "'"  + ticket.getDepartureTime() + "',	" + 
             "'"  + ticket.getOperatorNr() + "')";	 
             stmt.execute(QUERYadd);
+            // TODO: Log that         
+      } catch (SQLException e) {
+         e.printStackTrace();
+      } 
+   }
+   public static void delete(Ticket ticket){
+      // Open a connection
+      try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+         Statement stmt = conn.createStatement();) {   
+            QUERYdelete = "DELETE FROM Tickets WHERE TicketNr='" 
+            + ticket.getTicketNr() 
+            + "' and CarrierNr='"
+            + ticket.getCarrierNr() + "';";	 
+            stmt.execute(QUERYdelete);
+            // TODO: Log that         
+      } catch (SQLException e) {
+         e.printStackTrace();
+      } 
+   }
+   public static void edit(Ticket ticketBase, Ticket ticketDesired){
+      // Open a connection
+      try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+         Statement stmt = conn.createStatement();) {               
+            QUERYdelete = "UPDATE Tickets SET " 
+            + "TicketNr = '" + ticketDesired.getTicketNr() + "', "
+            + "CarrierNr = '" + ticketDesired.getCarrierNr() + "', "
+            + "ReservationNr = '" + ticketDesired.getReservationNr() + "', "
+            + "Price = '" + ticketDesired.getPrice() + "', "
+            + "PESEL = '" + ticketDesired.getPesel() + "', "
+            + "FlightPath = '" + ticketDesired.getFlightPath() + "', "
+            + "DepartureTime = '" + ticketDesired.getDepartureTime() + "', "
+            + "OperatorNr = '" + ticketDesired.getOperatorNr() + "' "
+            + "WHERE TicketNr='" 
+            + ticketBase.getTicketNr() 
+            + "' and CarrierNr='"
+            + ticketBase.getCarrierNr() + "';";	 
+            System.out.println(QUERYdelete);
+            stmt.execute(QUERYdelete);
             // TODO: Log that         
       } catch (SQLException e) {
          e.printStackTrace();
