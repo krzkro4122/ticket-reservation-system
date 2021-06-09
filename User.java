@@ -18,4 +18,15 @@ public class User {
     public void SetPesel(String pesel){ this.pesel = pesel; }
     public void SetPassword(String password){ this.password = password; }
     public void SetFullName(String fullName){ this.fullName = fullName; }
+
+    // toString
+    @Override
+    public String toString(){
+        return (
+            "Pesel: " + pesel +
+            "\nPassword: " + password +
+            "\nFullName: " + fullName +
+            "\n"
+        );
+    }
 }

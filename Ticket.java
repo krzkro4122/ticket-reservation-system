@@ -2,6 +2,8 @@ public class Ticket {
     // Private fields
     private String ticketNr, carrierNr, reservationNr, price, pesel, flightPath, departureTime, operatorNr;
 
+    // Constructor without params
+    Ticket(){}
     // Constructor with params
     Ticket(String ticketNr, String carrierNr, String reservationNr, String price, String pesel, String flightPath, String departureTime, String operatorNr){
         this.ticketNr = ticketNr;
@@ -33,4 +35,19 @@ public class Ticket {
     public void setFlightPath(String flightPath){ this.flightPath = flightPath; }
     public void setDepartureTime(String departureTime){ this.departureTime = departureTime; }
     public void setOperatorNr(String operatorNr){ this.operatorNr = operatorNr; }
+
+    // toString
+    @Override
+    public String toString(){        
+        return (
+            "TicketNr: " + ticketNr +
+            "\nCarrierNr: " + carrierNr +
+            "\nReservationNr: " + reservationNr +
+            "\nPrice: " + price +
+            "\nPESEL: " + pesel +
+            "\nFlightPath: " + flightPath +
+            "\nDepartureTime: " + departureTime +
+            "\nOperatorNr: " + operatorNr +
+            "\n");
+    }
 }
