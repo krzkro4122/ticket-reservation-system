@@ -16,9 +16,8 @@ public class TicketDAO {
       getAll();
       for (Ticket ticket : tickets)
          delete(ticket);
-      // listAll();
    }
-   public static void getAll(){
+   public static ArrayList<Ticket> getAll(){
       // Open a connection
       try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
          Statement stmt = conn.createStatement();
@@ -39,16 +38,17 @@ public class TicketDAO {
             );
             tickets.add(ticket);            
             // Retrieve by column name
-            System.out.println(ticket); // TODO: Log that
+            // System.out.println(ticket); // TODO: Log that
          }
       } catch (SQLException e) {
          e.printStackTrace();
       } 
+      return tickets;
    }
    public static void add(Ticket ticket){
       // Open a connection
       try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-         Statement stmt = conn.createStatement();) {   
+         Statement stmt = conn.createStatement();) {               
             QUERYadd = "INSERT INTO Tickets " + 
             "(TicketNr, CarrierNr, ReservationNr, Price, PESEL, FlightPath, DepartureTime, OperatorNr)" +
             " VALUES " +

@@ -17,7 +17,7 @@ public class UserDAO {
       for (User user : users)
         delete(user);
    }
-   public static void getAll(){
+   public static ArrayList<User> getAll(){
       // Open a connection
       try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
          Statement stmt = conn.createStatement();
@@ -33,11 +33,12 @@ public class UserDAO {
             );            
             users.add(user);            
             // Retrieve by column name
-            System.out.println(user); // TODO: Log that
+            // System.out.println(user); // TODO: Log that
          }
       } catch (SQLException e) {
          e.printStackTrace();
-      } 
+      }
+      return users; 
    }
    public static void add(User user){
       // Open a connection

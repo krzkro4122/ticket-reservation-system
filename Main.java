@@ -4,7 +4,7 @@ public class Main {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run(){
-                LoginFrame.createTicketReservationFrame("tester1");
+                LoginFrame.createTicketReservationFrame("12287952565");
             }
         });
     }

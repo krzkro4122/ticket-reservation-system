@@ -89,13 +89,14 @@ public class LoginFrame extends JFrame implements ActionListener {
 
     // Retrieve usernames with respective passwords and store them in a map
     public Map<String, String> createDataMap(){
-        Map<String, String> credentialMap = new HashMap<String, String>();                
-
-        // int numberOfUsers = 2;
-        // for (int i = 0; i < numberOfUsers; i++) {            
-            credentialMap.put("mehtab", "12345");
-            credentialMap.put("99111104190", "krkrol");
-        // }
+        Map<String, String> credentialMap = new HashMap<String, String>();   
+        
+        // Get users info from database and create a hashmap of PESEL and Password
+        ArrayList<User> users = UserDAO.getAll();
+        for (User user : users)
+            credentialMap.put(user.GetPesel(), user.GetPassword());
+          
+        credentialMap.put("mehtab", "12345");
 
         return credentialMap;
     }
