@@ -3,11 +3,15 @@ import java.awt.*;
 import java.util.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import org.apache.logging.log4j.*;
 
 public class LoginFrame extends JFrame implements ActionListener {
 
+    private static final Logger logger = LogManager.getLogger("LoginFrame");
+
     Container container = getContentPane();
-    JPanel containerPanel = new JPanel();
+    JPanel containerPanel = new JPanel();    
+    JPanel registerPanel = new JPanel();   
 
     JLabel userLabel = new JLabel("USERNAME", SwingConstants.CENTER);
     JLabel passwordLabel = new JLabel("PASSWORD", SwingConstants.CENTER);
@@ -15,11 +19,12 @@ public class LoginFrame extends JFrame implements ActionListener {
     JPasswordField passwordField = new JPasswordField();
     JButton loginButton = new JButton("LOGIN");
     JButton resetButton = new JButton("RESET");
+    JButton registerButton = new JButton("REGISTER");
     JCheckBox showPassword = new JCheckBox("Show Password");    
     static Map<String, String> credentialMap;
 
     // Constructor
-    LoginFrame() {
+    LoginFrame() {        
         init();
         setFonts();
         setColors();
@@ -27,13 +32,14 @@ public class LoginFrame extends JFrame implements ActionListener {
         addComponentsToContainer();
         addActionEvent();        
         credentialMap = createDataMap();
+        logger.log(Level.ERROR, "Constructed.");    
     }
 
     public void init(){        
         this.setTitle("Login");
         this.setVisible(true);
-        this.setBounds(10, 10, 300, 200);
-        this.setPreferredSize(new Dimension(300, 200));  
+        this.setBounds(10, 10, 300, 300);
+        this.setPreferredSize(new Dimension(300, 300));  
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         containerPanel.setBorder(BorderFactory.createTitledBorder("Login"));
@@ -48,6 +54,7 @@ public class LoginFrame extends JFrame implements ActionListener {
         showPassword.setFont(new Font("Arial", Font.PLAIN, 14)); 
         loginButton.setFont(new Font("Arial", Font.PLAIN, fontSize));
         resetButton.setFont(new Font("Arial", Font.PLAIN, fontSize));
+        registerButton.setFont(new Font("Arial", Font.PLAIN, fontSize));
     }
 
     public void setColors() {
@@ -55,16 +62,20 @@ public class LoginFrame extends JFrame implements ActionListener {
         Color buttonTextColor = Color.white;
         loginButton.setForeground(buttonTextColor);
         resetButton.setForeground(buttonTextColor);
+        registerButton.setForeground(buttonTextColor);
         Color buttonColor = Color.darkGray;
-        loginButton.setBackground(buttonColor);
+        loginButton.setBackground(buttonColor);        
         resetButton.setBackground(buttonColor);
+        registerButton.setBackground(buttonColor);
     }
 
     public void setLayoutManager() {
+        container.setLayout(new BoxLayout(container, BoxLayout.PAGE_AXIS));
         containerPanel.setLayout(new GridLayout(6, 2));
     }
 
     public void addComponentsToContainer() {
+
         containerPanel.add(new Label()); // 👻
         containerPanel.add(new Label()); // 👻
         containerPanel.add(userLabel);
@@ -77,7 +88,11 @@ public class LoginFrame extends JFrame implements ActionListener {
         containerPanel.add(new Label()); // 👻
         containerPanel.add(loginButton);
         containerPanel.add(resetButton);
+
+        registerPanel.add(registerButton);
+         
         container.add(containerPanel);
+        container.add(registerPanel);
     }
 
     public void addActionEvent() {
@@ -85,6 +100,7 @@ public class LoginFrame extends JFrame implements ActionListener {
         resetButton.addActionListener(this);
         showPassword.addActionListener(this);
         passwordField.addActionListener(this);
+        registerButton.addActionListener(this);
     }
 
     // Retrieve usernames with respective passwords and store them in a map
@@ -95,18 +111,21 @@ public class LoginFrame extends JFrame implements ActionListener {
         ArrayList<User> users = UserDAO.getAll();
         for (User user : users)
             credentialMap.put(user.GetPesel(), user.GetPassword());
-          
-        credentialMap.put("mehtab", "12345");
-
+        
         return credentialMap;
     }
 
     public boolean checkCredentials(String username, String password){
+        credentialMap = createDataMap();
         // Check whether username already exists
         if(credentialMap.containsKey(username)){
             // Check whether password mathes the given username
-            if(credentialMap.get(username).equals(password)) return true;
+            if(credentialMap.get(username).equals(password)) {
+                logger.log(Level.ERROR, "Credendtials OK.");    
+                return true;
+            }
         }        
+        logger.log(Level.ERROR, "Credendtials INVALID.");    
         return false;
     }
 
@@ -119,6 +138,7 @@ public class LoginFrame extends JFrame implements ActionListener {
 
         // Button "Login" or enter key press
         if (e.getSource() == loginButton || e.getSource() == passwordField) {
+            logger.log(Level.ERROR, "Login button pressed.");    
             String userText;
             String pwdText;
 
@@ -139,18 +159,23 @@ public class LoginFrame extends JFrame implements ActionListener {
         }
         // Button "Reset"
         if (e.getSource() == resetButton) {
+            logger.log(Level.ERROR, "Reset button pressed.");    
             userTextField.setText("");
             passwordField.setText("");
         }
         // RadioButton "Show Password"
         if (e.getSource() == showPassword) {
+            logger.log(Level.ERROR, "ShowPassword radio button pressed.");    
             if (showPassword.isSelected()) passwordField.setEchoChar((char) 0);
             else {
                 passwordField.setEchoChar('*');
                 passwordField.requestFocus();                
             }
         }
-
+         // Button "Register"
+         if (e.getSource() == registerButton) {
+            logger.log(Level.ERROR, "Register button pressed.");    
+            new UserAddPopup();
+        }
     }
-
 }

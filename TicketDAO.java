@@ -1,7 +1,11 @@
 import java.sql.*;
 import java.util.*;
+import org.apache.logging.log4j.*;
 
 public class TicketDAO {
+
+   private static final Logger logger = LogManager.getLogger("TicketDAO");
+
    static final String DB_URL = "jdbc:mysql://mysql.agh.edu.pl:3306/krkrol1";
    static final String USER = "krkrol1";
    static final String PASS = "jX0nfDtzPjC8101B";   
@@ -11,13 +15,9 @@ public class TicketDAO {
    static String QUERYadd;
    static String QUERYdelete;
    static String QUERYedit;
-
-   public static void main(String[] args) {
-      getAll();
-      for (Ticket ticket : tickets)
-         delete(ticket);
-   }
+   
    public static ArrayList<Ticket> getAll(){
+      logger.log(Level.ERROR, "Getting Ticket data from Database...");       
       // Open a connection
       try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
          Statement stmt = conn.createStatement();
@@ -37,8 +37,6 @@ public class TicketDAO {
                rs.getString("OperatorNr")
             );
             tickets.add(ticket);            
-            // Retrieve by column name
-            // System.out.println(ticket); // TODO: Log that
          }
       } catch (SQLException e) {
          e.printStackTrace();
@@ -46,6 +44,7 @@ public class TicketDAO {
       return tickets;
    }
    public static void add(Ticket ticket){
+      logger.log(Level.ERROR, "Adding ticket: " + ticket + " to Database...");       
       // Open a connection
       try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
          Statement stmt = conn.createStatement();) {               
@@ -60,13 +59,13 @@ public class TicketDAO {
             "'"  + ticket.getFlightPath() + "',	" + 
             "'"  + ticket.getDepartureTime() + "',	" + 
             "'"  + ticket.getOperatorNr() + "')";	 
-            stmt.execute(QUERYadd);
-            // TODO: Log that         
+            stmt.execute(QUERYadd);      
       } catch (SQLException e) {
          e.printStackTrace();
       } 
    }
    public static void delete(Ticket ticket){
+      logger.log(Level.ERROR, "Deleting ticket: " + ticket + " from Database..."); 
       // Open a connection
       try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
          Statement stmt = conn.createStatement();) {   
@@ -74,13 +73,13 @@ public class TicketDAO {
             + ticket.getTicketNr() 
             + "' and CarrierNr='"
             + ticket.getCarrierNr() + "';";	 
-            stmt.execute(QUERYdelete);
-            // TODO: Log that         
+            stmt.execute(QUERYdelete);      
       } catch (SQLException e) {
          e.printStackTrace();
       } 
    }
    public static void edit(Ticket ticketBase, Ticket ticketDesired){
+      logger.log(Level.ERROR, "Updating ticket from: " + ticketBase + " to: " + ticketDesired + " in Database..."); 
       // Open a connection
       try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
          Statement stmt = conn.createStatement();) {               
@@ -98,8 +97,7 @@ public class TicketDAO {
             + "' and CarrierNr='"
             + ticketBase.getCarrierNr() + "';";	 
             System.out.println(QUERYdelete);
-            stmt.execute(QUERYdelete);
-            // TODO: Log that         
+            stmt.execute(QUERYdelete);   
       } catch (SQLException e) {
          e.printStackTrace();
       } 

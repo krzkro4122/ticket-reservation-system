@@ -1,11 +1,15 @@
+import org.apache.logging.log4j.*;
+
 public class Main {
-    public static void main(String[] args) {
-        // javax.swing.SwingUtilities.invokeLater(Login::createLoginWindow);
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run(){
-                LoginFrame.createTicketReservationFrame("12287952565");
-            }
-        });
+    private static final Logger logger = LogManager.getLogger("Main");
+    public static void main(String[] args) { 
+        logger.log(Level.ERROR, "Started the Program.");         
+        javax.swing.SwingUtilities.invokeLater(Login::createLoginWindow);                    
+        // javax.swing.SwingUtilities.invokeLater(new Runnable() {
+        //     @Override
+        //     public void run(){
+        //         LoginFrame.createTicketReservationFrame("12287952565");
+        //     }
+        // });
     }
 }

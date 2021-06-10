@@ -2,6 +2,9 @@ public class User {
     // Private fields
     private String pesel, password, fullName;
 
+    // Constructor without params
+    User(){}
+
     // Constructor with params
     User(String pesel, String password, String fullName){
         this.pesel = pesel;

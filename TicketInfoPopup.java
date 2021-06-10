@@ -3,8 +3,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
+import org.apache.logging.log4j.*;
 
 public class TicketInfoPopup extends JFrame implements ActionListener {
+
+    private static final Logger logger = LogManager.getLogger("Login");
 
     Container container = getContentPane();
     JPanel panelOfPanels = new JPanel(new GridBagLayout());        
@@ -22,6 +25,7 @@ public class TicketInfoPopup extends JFrame implements ActionListener {
     TicketInfoPopup(Ticket ticket, User user){
         init(ticket, user);
         addComponentsToContainer(ticket, user);
+        logger.log(Level.ERROR, "Constructed.");    
     }
 
     private void init(Ticket ticket, User user){     

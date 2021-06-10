@@ -1,7 +1,11 @@
 import java.sql.*;
 import java.util.*;
+import org.apache.logging.log4j.*;
 
 public class UserDAO {
+
+   private static final Logger logger = LogManager.getLogger("UserDAO");
+
    static final String DB_URL = "jdbc:mysql://mysql.agh.edu.pl:3306/krkrol1";
    static final String USER = "krkrol1";
    static final String PASS = "jX0nfDtzPjC8101B";   
@@ -11,13 +15,9 @@ public class UserDAO {
    static String QUERYadd;
    static String QUERYdelete;
    static String QUERYedit;
-
-   public static void main(String[] args) {
-      getAll();
-      for (User user : users)
-        delete(user);
-   }
+   
    public static ArrayList<User> getAll(){
+      logger.log(Level.ERROR, "Getting User data from Database...");       
       // Open a connection
       try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
          Statement stmt = conn.createStatement();
@@ -32,8 +32,6 @@ public class UserDAO {
                rs.getString("FullName")
             );            
             users.add(user);            
-            // Retrieve by column name
-            // System.out.println(user); // TODO: Log that
          }
       } catch (SQLException e) {
          e.printStackTrace();
@@ -41,6 +39,7 @@ public class UserDAO {
       return users; 
    }
    public static void add(User user){
+      logger.log(Level.ERROR, "Adding user: " + user + " to Database...");       
       // Open a connection
       try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
          Statement stmt = conn.createStatement();) {   
@@ -51,24 +50,24 @@ public class UserDAO {
             "'"  + user.GetPassword() + "', " + 
             "'"  + user.GetfullName() + "')";	 
             stmt.execute(QUERYadd);
-            // TODO: Log that         
       } catch (SQLException e) {
          e.printStackTrace();
       } 
    }
    public static void delete(User user){
+      logger.log(Level.ERROR, "Deleting user: " + user + " from Database...");
       // Open a connection
       try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
          Statement stmt = conn.createStatement();) {   
             QUERYdelete = "DELETE FROM Users WHERE PESEL='" 
             + user.GetPesel() + "';";	 
-            stmt.execute(QUERYdelete);
-            // TODO: Log that         
+            stmt.execute(QUERYdelete); 
       } catch (SQLException e) {
          e.printStackTrace();
       } 
    }
    public static void edit(User userBase, User userDesired){
+      logger.log(Level.ERROR, "Updating user from: " + userBase + " to: " + userDesired + " in Database...");
       // Open a connection
       try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
          Statement stmt = conn.createStatement();) {               
@@ -80,7 +79,6 @@ public class UserDAO {
             + userBase.GetPesel() + "';";	 
             System.out.println(QUERYdelete);
             stmt.execute(QUERYdelete);
-            // TODO: Log that         
       } catch (SQLException e) {
          e.printStackTrace();
       } 

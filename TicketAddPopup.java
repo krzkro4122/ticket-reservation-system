@@ -3,8 +3,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
+import java.util.regex.Pattern;
+import org.apache.logging.log4j.*;
 
 public class TicketAddPopup extends JFrame implements ActionListener {
+    private static final Logger logger = LogManager.getLogger("TicketAddPopup");
 
     Container container = getContentPane();
     JPanel panelOfPanels = new JPanel(new GridBagLayout());        
@@ -27,12 +30,13 @@ public class TicketAddPopup extends JFrame implements ActionListener {
         addComponentsToContainer();
         this.trf = trf;
         this.user = user;
+        logger.log(Level.ERROR, "Constructed.");    
     }
 
     private void init(){   
         this.setTitle("Ticket Addition");
-        this.setPreferredSize(new Dimension(350, 300));        
-        this.setBounds(0, 0, 350, 300);
+        this.setPreferredSize(new Dimension(375, 300));        
+        this.setBounds(0, 0, 375, 300);
         this.setVisible(true);        
 
         ticketInformationPanel.setBorder(BorderFactory.createTitledBorder("Fill in new ticket info: "));
@@ -74,17 +78,24 @@ public class TicketAddPopup extends JFrame implements ActionListener {
         container.add(panelOfPanels);
     }
 
-    public boolean checkExpressions(){ // TODO: actually check them
-        // int counter = 0;
-        // int fieldSizes[] = {9, 6, 6, 7, 19, 7};
+    public int checkExpressions(){         
+        // Check regex
+        if (!Pattern.compile("\\d{9}").matcher(listOfTicketValueLabels.get(0).getText()).matches()) return 1;
+        if (!Pattern.compile("[a-zA-Z]{2}\\d{4}").matcher(listOfTicketValueLabels.get(1).getText()).matches()) return 1;
+        if (!Pattern.compile("[a-zA-Z]{6}").matcher(listOfTicketValueLabels.get(2).getText()).matches()) return 1;
+        if (!Pattern.compile("\\d+").matcher(listOfTicketValueLabels.get(3).getText()).matches()) return 1;
+        if (!Pattern.compile("[a-zA-Z]{3}[-][a-zA-Z]{3}").matcher(listOfTicketValueLabels.get(4).getText()).matches()) return 1;
+        if (!Pattern.compile("\\d{4}[-]\\d{2}[-]\\d{2}[ ]\\d{2}[:]\\d{2}[:]\\d{2}").matcher(listOfTicketValueLabels.get(5).getText()).matches()) return 1;
+        if (!Pattern.compile("([a-zA-Z]{2}\\d{4})??").matcher(listOfTicketValueLabels.get(6).getText()).matches()) return 1;
 
-        // for (JTextField jtf : listOfTicketValueLabels){
-        //     if(counter != 3){
-        //         if(!(jtf.getText().length() == fieldSizes[counter])) return false;            
-        //     }
-        //     counter++;
-        // }
-        return true;
+        // Check if already exists
+        ArrayList<Ticket> tickets = TicketDAO.getAll();        
+
+        for (Ticket ticket : tickets) {
+            if (ticket.getTicketNr().equals(listOfTicketValueLabels.get(0).getText()) && ticket.getCarrierNr().equals(listOfTicketValueLabels.get(1).getText())) return 2;   
+        }
+
+        return 0;        
     }
 
     public void addTicket(){
@@ -112,18 +123,25 @@ public class TicketAddPopup extends JFrame implements ActionListener {
 
         // Add Ticket button clicked => check if valid input and add it to parent window
         if(e.getSource() == addTicket){
+            logger.log(Level.ERROR, "Add Ticket button pressed.");    
             // if valid input, add the Ticket
-            if(checkExpressions() == true) {
+            if(checkExpressions() == 0) {
+                logger.log(Level.ERROR, "Input VALID.");    
                 addTicket();
                 SwingUtilities.updateComponentTreeUI(trf.ticketsPanel);                
                 this.setVisible(false);
             // Warn about wrong input
-            } else {
+            } else if(checkExpressions() == 1){
+                logger.log(Level.ERROR, "Input INVALID.");    
                 JOptionPane.showMessageDialog(this, "Incorrect values!");
+            } else {
+                logger.log(Level.ERROR, "Input ALREADY EXISTS.");    
+                JOptionPane.showMessageDialog(this, "Ticket with TicketNr: " + listOfTicketValueLabels.get(0).getText() + "\nand CarrierNr: " + listOfTicketValueLabels.get(1).getText() + "\nAlready exists!");
             }
         }
         // Reset button clicked => clear all textFields
         if(e.getSource() == resetFields){
+        logger.log(Level.ERROR, "Reset button pressed.");    
             for (JTextField jtf : listOfTicketValueLabels){
                 jtf.setText("");
             }           
