@@ -32,7 +32,7 @@ public class LoginFrame extends JFrame implements ActionListener {
         addComponentsToContainer();
         addActionEvent();        
         credentialMap = createDataMap();
-        logger.log(Level.ERROR, "Constructed.");    
+        logger.log(Level.INFO, "Opened.");    
     }
 
     public void init(){        
@@ -121,11 +121,11 @@ public class LoginFrame extends JFrame implements ActionListener {
         if(credentialMap.containsKey(username)){
             // Check whether password mathes the given username
             if(credentialMap.get(username).equals(password)) {
-                logger.log(Level.ERROR, "Credendtials OK.");    
+                logger.log(Level.INFO, "Credendtials OK.");    
                 return true;
             }
         }        
-        logger.log(Level.ERROR, "Credendtials INVALID.");    
+        logger.log(Level.INFO, "Credendtials INVALID.");    
         return false;
     }
 
@@ -138,7 +138,7 @@ public class LoginFrame extends JFrame implements ActionListener {
 
         // Button "Login" or enter key press
         if (e.getSource() == loginButton || e.getSource() == passwordField) {
-            logger.log(Level.ERROR, "Login button pressed.");    
+            logger.log(Level.INFO, "Login button pressed.");    
             String userText;
             String pwdText;
 
@@ -159,13 +159,13 @@ public class LoginFrame extends JFrame implements ActionListener {
         }
         // Button "Reset"
         if (e.getSource() == resetButton) {
-            logger.log(Level.ERROR, "Reset button pressed.");    
+            logger.log(Level.INFO, "Reset button pressed.");    
             userTextField.setText("");
             passwordField.setText("");
         }
         // RadioButton "Show Password"
         if (e.getSource() == showPassword) {
-            logger.log(Level.ERROR, "ShowPassword radio button pressed.");    
+            logger.log(Level.INFO, "ShowPassword radio button pressed.");    
             if (showPassword.isSelected()) passwordField.setEchoChar((char) 0);
             else {
                 passwordField.setEchoChar('*');
@@ -174,7 +174,7 @@ public class LoginFrame extends JFrame implements ActionListener {
         }
          // Button "Register"
          if (e.getSource() == registerButton) {
-            logger.log(Level.ERROR, "Register button pressed.");    
+            logger.log(Level.INFO, "Register button pressed.");    
             new UserAddPopup();
         }
     }

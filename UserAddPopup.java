@@ -26,7 +26,7 @@ public class UserAddPopup extends JFrame implements ActionListener {
     UserAddPopup(){        
         init();
         addComponentsToContainer();
-        logger.log(Level.ERROR, "Constructed.");    
+        logger.log(Level.INFO, "Opened.");    
     }
 
     private void init(){   
@@ -105,23 +105,23 @@ public class UserAddPopup extends JFrame implements ActionListener {
 
         // Add User button clicked => check if valid input and add it to parent window
         if(e.getSource() == addUser){
-            logger.log(Level.ERROR, "Add User button pressed.");    
+            logger.log(Level.INFO, "Add User button pressed.");    
             // if valid input, add the Ticket
             if(checkExpressions() == 0) {
-                logger.log(Level.ERROR, "Values OK.");    
+                logger.log(Level.INFO, "Values OK.");    
                 addTicket();                
                 this.setVisible(false);
             // Warn about wrong input
             } else if (checkExpressions() == 1){
-                logger.log(Level.ERROR, "Values INCORRECT.");    
+                logger.log(Level.INFO, "Values INCORRECT.");    
                 JOptionPane.showMessageDialog(this, "Incorrect values!");
             } else {
-                logger.log(Level.ERROR, "Values ALREADY EXIST.");    
+                logger.log(Level.INFO, "Values ALREADY EXIST.");    
                 JOptionPane.showMessageDialog(this, "User with PESEL: " + listOfUserValueLabels.get(0).getText() + " alerady exists!");
             }
         }
         // Reset button clicked => clear all textFields
-        logger.log(Level.ERROR, "Reset button pressed.");    
+        logger.log(Level.INFO, "Reset button pressed.");    
         if(e.getSource() == resetFields){
             for (JTextField jtf : listOfUserValueLabels){
                 jtf.setText("");

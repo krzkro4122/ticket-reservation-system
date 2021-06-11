@@ -25,7 +25,7 @@ public class TicketInfoPopup extends JFrame implements ActionListener {
     TicketInfoPopup(Ticket ticket, User user){
         init(ticket, user);
         addComponentsToContainer(ticket, user);
-        logger.log(Level.ERROR, "Constructed.");    
+        logger.log(Level.INFO, "Opened.");    
     }
 
     private void init(Ticket ticket, User user){     

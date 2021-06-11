@@ -40,14 +40,14 @@ public class Ticket {
     @Override
     public String toString(){        
         return (
-            "TicketNr: " + ticketNr +
-            "\nCarrierNr: " + carrierNr +
-            "\nReservationNr: " + reservationNr +
-            "\nPrice: " + price +
-            "\nPESEL: " + pesel +
-            "\nFlightPath: " + flightPath +
-            "\nDepartureTime: " + departureTime +
-            "\nOperatorNr: " + operatorNr +
-            "\n");
+            "[TicketNr: " + ticketNr +
+            " CarrierNr: " + carrierNr +
+            " ReservationNr: " + reservationNr +
+            " Price: " + price +
+            " PESEL: " + pesel +
+            " FlightPath: " + flightPath +
+            " DepartureTime: " + departureTime +
+            " OperatorNr: " + operatorNr +
+            " ]");
     }
 }

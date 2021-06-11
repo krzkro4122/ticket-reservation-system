@@ -26,10 +26,10 @@ public class User {
     @Override
     public String toString(){
         return (
-            "Pesel: " + pesel +
-            "\nPassword: " + password +
-            "\nFullName: " + fullName +
-            "\n"
+            "[Pesel: " + pesel +
+            " Password: " + password +
+            " FullName: " + fullName +
+            " ]"
         );
     }
 }

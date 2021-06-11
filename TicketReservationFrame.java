@@ -30,7 +30,7 @@ public class TicketReservationFrame extends JFrame implements ActionListener {
         setLayout();
         addComponentsToContainer(username);
         addActionEvent(); 
-        logger.log(Level.ERROR, "Constructed.");    
+        logger.log(Level.INFO, "Opened.");    
     }    
 
     private void init(String username){    
@@ -100,13 +100,13 @@ public class TicketReservationFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         // Add button pressed
         if(e.getSource() == addTicketButton){  
-            logger.log(Level.ERROR, "Add Ticket button pressed.");                   
+            logger.log(Level.INFO, "Add Ticket button pressed.");                   
             // Add form
             new TicketAddPopup(this, user);
 
         // Delete button pressed
         } else if(e.getSource() == deleteTicketButton){    
-            logger.log(Level.ERROR, "Delete Ticket button pressed.");     
+            logger.log(Level.INFO, "Delete Ticket button pressed.");     
 
             // If any ticket already picked => delete it
             if (lastClickedButton != null){
@@ -117,16 +117,16 @@ public class TicketReservationFrame extends JFrame implements ActionListener {
             } 
         // Refresh button pressed
         } else if(e.getSource() == refreshButton){   
-            logger.log(Level.ERROR, "Refresh button pressed.");               
+            logger.log(Level.INFO, "Refresh button pressed.");               
             addComponentsToContainer(username);
             SwingUtilities.updateComponentTreeUI(this);  
-            logger.log(Level.ERROR, "Tickets Refreshed.");       
+            logger.log(Level.INFO, "Tickets Refreshed.");       
 
         // Any ticket's button clicked
         } else {                   
             // Clicked a 2nd time => open up a form with its details
             if (e.getSource() == lastClickedButton){                          
-                logger.log(Level.ERROR, lastClickedButton.getButtonsTicket().getCarrierNr() + " button clicked 2nd time.");
+                logger.log(Level.INFO, lastClickedButton.getButtonsTicket().getCarrierNr() + " button clicked 2nd time.");
                 new TicketInfoPopup(lastClickedButton.getButtonsTicket(), user).pack();                         
                 lastClickedButton = null;
                 deleteTicketButton.setText("Delete");
@@ -136,7 +136,7 @@ public class TicketReservationFrame extends JFrame implements ActionListener {
                 lastClickedButton = (myJButton) e.getSource();
                 lastClickedButton.setButtonsTicket(((myJButton) e.getSource()).getButtonsTicket());
                 deleteTicketButton.setText("Delete " + lastClickedButton.getButtonsTicket().getCarrierNr());
-                logger.log(Level.ERROR, lastClickedButton.getButtonsTicket().getCarrierNr() + " button clicked 1st time.");       
+                logger.log(Level.INFO, lastClickedButton.getButtonsTicket().getCarrierNr() + " button clicked 1st time.");       
             }
         }
 

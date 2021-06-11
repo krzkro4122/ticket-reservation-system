@@ -17,7 +17,7 @@ public class UserDAO {
    static String QUERYedit;
    
    public static ArrayList<User> getAll(){
-      logger.log(Level.ERROR, "Getting User data from Database...");       
+      logger.log(Level.INFO, "Getting User data...");       
       // Open a connection
       try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
          Statement stmt = conn.createStatement();
@@ -39,7 +39,7 @@ public class UserDAO {
       return users; 
    }
    public static void add(User user){
-      logger.log(Level.ERROR, "Adding user: " + user + " to Database...");       
+      logger.log(Level.INFO, "Adding user: " + user + " to Database...");       
       // Open a connection
       try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
          Statement stmt = conn.createStatement();) {   
@@ -55,7 +55,7 @@ public class UserDAO {
       } 
    }
    public static void delete(User user){
-      logger.log(Level.ERROR, "Deleting user: " + user + " from Database...");
+      logger.log(Level.INFO, "Deleting user: " + user + " from Database...");
       // Open a connection
       try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
          Statement stmt = conn.createStatement();) {   
@@ -67,7 +67,7 @@ public class UserDAO {
       } 
    }
    public static void edit(User userBase, User userDesired){
-      logger.log(Level.ERROR, "Updating user from: " + userBase + " to: " + userDesired + " in Database...");
+      logger.log(Level.INFO, "Updating user from: " + userBase + " to: " + userDesired + " in Database...");
       // Open a connection
       try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
          Statement stmt = conn.createStatement();) {               

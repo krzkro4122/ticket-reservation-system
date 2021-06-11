@@ -17,7 +17,7 @@ public class TicketDAO {
    static String QUERYedit;
    
    public static ArrayList<Ticket> getAll(){
-      logger.log(Level.ERROR, "Getting Ticket data from Database...");       
+      logger.log(Level.INFO, "Getting Ticket data...");       
       // Open a connection
       try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
          Statement stmt = conn.createStatement();
@@ -44,7 +44,7 @@ public class TicketDAO {
       return tickets;
    }
    public static void add(Ticket ticket){
-      logger.log(Level.ERROR, "Adding ticket: " + ticket + " to Database...");       
+      logger.log(Level.INFO, "Adding ticket: " + ticket + " to Database...");       
       // Open a connection
       try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
          Statement stmt = conn.createStatement();) {               
@@ -65,7 +65,7 @@ public class TicketDAO {
       } 
    }
    public static void delete(Ticket ticket){
-      logger.log(Level.ERROR, "Deleting ticket: " + ticket + " from Database..."); 
+      logger.log(Level.INFO, "Deleting ticket: " + ticket + " from Database..."); 
       // Open a connection
       try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
          Statement stmt = conn.createStatement();) {   
@@ -79,7 +79,7 @@ public class TicketDAO {
       } 
    }
    public static void edit(Ticket ticketBase, Ticket ticketDesired){
-      logger.log(Level.ERROR, "Updating ticket from: " + ticketBase + " to: " + ticketDesired + " in Database..."); 
+      logger.log(Level.INFO, "Updating ticket from: " + ticketBase + " to: " + ticketDesired + " in Database..."); 
       // Open a connection
       try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
          Statement stmt = conn.createStatement();) {               

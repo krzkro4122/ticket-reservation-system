@@ -30,7 +30,7 @@ public class TicketAddPopup extends JFrame implements ActionListener {
         addComponentsToContainer();
         this.trf = trf;
         this.user = user;
-        logger.log(Level.ERROR, "Constructed.");    
+        logger.log(Level.INFO, "Opened.");    
     }
 
     private void init(){   
@@ -123,25 +123,25 @@ public class TicketAddPopup extends JFrame implements ActionListener {
 
         // Add Ticket button clicked => check if valid input and add it to parent window
         if(e.getSource() == addTicket){
-            logger.log(Level.ERROR, "Add Ticket button pressed.");    
+            logger.log(Level.INFO, "Add Ticket button pressed.");    
             // if valid input, add the Ticket
             if(checkExpressions() == 0) {
-                logger.log(Level.ERROR, "Input VALID.");    
+                logger.log(Level.INFO, "Input VALID.");    
                 addTicket();
                 SwingUtilities.updateComponentTreeUI(trf.ticketsPanel);                
                 this.setVisible(false);
             // Warn about wrong input
             } else if(checkExpressions() == 1){
-                logger.log(Level.ERROR, "Input INVALID.");    
+                logger.log(Level.INFO, "Input INVALID.");    
                 JOptionPane.showMessageDialog(this, "Incorrect values!");
             } else {
-                logger.log(Level.ERROR, "Input ALREADY EXISTS.");    
+                logger.log(Level.INFO, "Input ALREADY EXISTS.");    
                 JOptionPane.showMessageDialog(this, "Ticket with TicketNr: " + listOfTicketValueLabels.get(0).getText() + "\nand CarrierNr: " + listOfTicketValueLabels.get(1).getText() + "\nAlready exists!");
             }
         }
         // Reset button clicked => clear all textFields
         if(e.getSource() == resetFields){
-        logger.log(Level.ERROR, "Reset button pressed.");    
+        logger.log(Level.INFO, "Reset button pressed.");    
             for (JTextField jtf : listOfTicketValueLabels){
                 jtf.setText("");
             }           
