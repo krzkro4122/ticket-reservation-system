@@ -1,5 +1,5 @@
 # TicketReservationApp
-Ticket Reservation GUI Desktop Application
+Ticket Reservation GUI Platform-independent Desktop Application
 
 GUI: Swing
 <br>Logging: Log4J</br>
